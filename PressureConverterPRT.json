@@ -1,0 +1,93 @@
+{
+    "metadata": {
+        "defaultName": "Преобразователь давления PRT",
+        "description": "Преобразователь давления PRT",
+        "version": "0.0.1",
+        "author": "Эпов А.Г."
+    },
+    "styleParameters": [
+        {
+            "name": "General",
+            "text": "Общие",
+            "params": [
+                {
+                    "name": "Material",
+                    "text": "Материал",
+                    "type": "Id",
+                    "entityTypeId": "0abcb18f-0aaf-4509-bf89-5c5fad9d5d8b"
+                },
+                {
+                    "name": "PipeDiameter",
+                    "text": "Диаметр трубопровода",
+                    "type": "Length",
+                    "default": "100",
+                    "min": "25",
+                    "max": "10000"
+                },
+                {
+                    "name": "FittingHeight",
+                    "text": "Высота штуцера",
+                    "type": "Length",
+                    "default": "40",
+                    "min": "25",
+                    "max": "1000"
+                },
+                {
+                    "name": "ConnectionSize",
+                    "text": "Размер присоединения",
+                    "type": "UserEnum",
+                    "default": "M",
+                    "items": [
+                        {
+                            "key": "M",
+                            "text": "M20x1,5"
+                        },
+                        {
+                            "key": "G",
+                            "text": "G1/2"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "ports": [
+        {
+            "name": "PipeInlet",
+            "text": "Трубопроводный вход",
+            "flowDirection": "Inlet",
+            "portRole":"TransitPort",
+            "systemCategories": [
+                "DomesticColdWater",
+                "DomesticHotWater",
+                "Heating",
+                "IndustrialColdWater",
+                "IndustrialHotWater",
+                "OtherPipeSystem"                
+            ]
+        },
+        {
+            "name": "PipeOutlet",
+            "text": "Трубопроводный выход",
+            "flowDirection": "Outlet",
+            "portRole":"TransitPort",
+            "systemCategories": [
+                "DomesticColdWater",
+                "DomesticHotWater",
+                "Heating",
+                "IndustrialColdWater",
+                "IndustrialHotWater",
+                "OtherPipeSystem"
+            ]
+        },
+        {
+            "name": "ElectricPort",
+            "text": "Для подключения электричества",
+            "flowDirection": "InletAndOutlet",
+            "portRole": "EndPort",
+            "systemCategories": [
+                "OtherElectricalSystem"
+            ]
+        }
+]
+}
