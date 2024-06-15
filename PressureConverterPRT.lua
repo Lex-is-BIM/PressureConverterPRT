@@ -7,6 +7,10 @@ local rFitting = (connSize =="M") and 11.5 or 7.85
 local lFitting = math.cos(math.asin(rFitting/rPipe))*rPipe+fHeight
 local elPortPlac = Placement3D(Point3D(34,0,lFitting+85),Vector3D(1,0,0),Vector3D(-1,0,0))
 
+function pipePlac(v)
+    return Placement3D(Point3D(0,0,0),Vector3D(1*v,0,0),Vector3D(-1*v,0,0))
+ end
+
 function circ(r)
     return CreateCircle2D(Point2D(0,0),r)
 end
@@ -42,6 +46,51 @@ local solid = Unite({
 })
 
 Style.SetDetailedGeometry(ModelGeometry():AddSolid(solid))
+
+--Symbol
+function symb(r)
+    local symb = GeometrySet2D()
+    local contour = CreateCircle2D(Point2D(0,r),r)
+    local p1=Point2D(-0.23*r,0.5*r)
+    local p2=Point2D(-0.23*r,1.5*r)
+    local pc1 = Point2D(0.025*r,1.3*r)
+    local p3=Point2D(0.025*r,1.5*r)
+    local p4=Point2D(0.225*r,1.3*r)
+    local p5=Point2D(0.225*r,1.15*r)
+    local pc2 = Point2D(0.025*r,1.15*r)
+    local p6 = Point2D(0.025*r,0.95*r)
+    local p7 = Point2D(-0.23*r,0.95*r)
+    symb:AddCurve(contour)
+    symb:AddMaterialColorSolidArea(FillArea(contour))
+    symb:AddCurve(CreateLineSegment2D(p1,p2))
+    symb:AddCurve(CreateLineSegment2D(p2,p3))
+    symb:AddCurve(CreateArc2DByCenterStartEndPoints(pc1,p3,p4,true))
+    symb:AddCurve(CreateLineSegment2D(p4,p5))
+    symb:AddCurve(CreateArc2DByCenterStartEndPoints(pc2,p5,p6,true))
+    symb:AddCurve(CreateLineSegment2D(p6,p7))
+    return symb
+end
+
+local symbolicLines = GeometrySet2D()
+symbolicLines:AddCurve(CreateLineSegment2D(Point2D(0,0),Point2D(0,lFitting+102)))
+symbolicLines:AddCurve(CreateLineSegment2D(Point2D(0,lFitting+85),Point2D(34,lFitting+85)))
+
+local symbolic = ModelGeometry()
+symbolic:AddGeometrySet2D(symb(70):Shift(0,lFitting+102))
+symbolic:AddGeometrySet2D(symbolicLines)
+
+local symbol = ModelGeometry()
+local symbolLines = GeometrySet2D():AddCurve(CreateLineSegment2D(Point2D(0,0),Point2D(0,10)))
+symbol:AddGeometrySet2D(symb(5):Shift(0,10))
+symbol:AddGeometrySet2D(symbolLines)
+
+Style.SetSymbolGeometry(symbol)
+Style.SetSymbolicGeometry(symbolic)
+
+--Ports
+Style.GetPort("PipeInlet"):SetPlacement(pipePlac(-1))
+Style.GetPort("PipeOutlet"):SetPlacement(pipePlac(1))
+Style.GetPort("ElectricPort"):SetPlacement(elPortPlac)
 
 
 
